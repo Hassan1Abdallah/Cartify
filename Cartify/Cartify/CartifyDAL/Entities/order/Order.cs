@@ -1,4 +1,5 @@
-﻿using CartifyDAL.Entities.user;
+﻿using CartifyDAL.Entities.payment;
+using CartifyDAL.Entities.user;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +24,10 @@ namespace CartifyDAL.Entities.order
             CreatedOn = DateTime.Now;
             IsDeleted = false;
         }
-
+        public Order()
+        {
+            
+        }
         [Key]
         public int OrderId { get; private set; }
 
@@ -42,6 +46,10 @@ namespace CartifyDAL.Entities.order
         [ForeignKey(nameof(UserId))]
         public User? User { get; private set; }
         public List<OrderItem>? OrderItems { get; private set; }
+        public int? PaymentId { get; private set; }
+        [ForeignKey(nameof(PaymentId))]
+        public Payment Payment { get; private set; }
+
         [Required]
         public string CreatedBy { get; private set; }
         public DateTime CreatedOn { get; private set; }

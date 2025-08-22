@@ -9,5 +9,6 @@ namespace CartifyDAL.Repo.Abstraction
         (Order? Order, string? ErrorMessage) GetById(int id);
         (bool Success, string? ErrorMessage) Update(Order order);
         (bool Success, string? ErrorMessage) Delete(int id);
+        Task<(Order, string?)> GetByIdWithItemsAsync(int orderId);
     }
 }

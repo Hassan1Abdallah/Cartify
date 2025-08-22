@@ -12,7 +12,7 @@ namespace CartifyDAL.Entities.order
 {
     public class Order
     {
-        public Order(string orderStatus, string shippingMethod, string trackingNumber = null, double shippingCost = 0, double tax = 0, string createdBy = null)
+        public Order(string orderStatus, string shippingMethod, string trackingNumber = null, double shippingCost = 0, double tax = 0, string createdBy = null, double subTotal = 0)
         {
             OrderStatus = orderStatus;
             ShippingMethod = shippingMethod;
@@ -23,6 +23,8 @@ namespace CartifyDAL.Entities.order
             CreatedBy = createdBy;
             CreatedOn = DateTime.Now;
             IsDeleted = false;
+            SubTotal = subTotal;
+            TotalAmount = subTotal + shippingCost + tax;
         }
         public Order()
         {
@@ -42,6 +44,11 @@ namespace CartifyDAL.Entities.order
         public string TrackingNumber { get; private set; }
         public double ShippingCost { get; private set; }
         public double Tax { get; private set; }
+
+        public double SubTotal { get; private set; }
+        public double TotalAmount { get; private set; }
+
+
         public string? UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User? User { get; private set; }
@@ -59,7 +66,7 @@ namespace CartifyDAL.Entities.order
         public DateTime? DeletedOn { get; private set; }
         public string? DeletedBy { get; private set; }
 
-        public void Update(string orderStatus, string shippingMethod, string trackingNumber, double shippingCost, double tax, string modifiedBy)
+        public void Update(string orderStatus, string shippingMethod, string trackingNumber, double shippingCost, double tax, string modifiedBy )
         {
 
 
@@ -68,6 +75,7 @@ namespace CartifyDAL.Entities.order
             TrackingNumber = trackingNumber;
             ShippingCost = shippingCost;
             Tax = tax;
+            TotalAmount = SubTotal + shippingCost + tax;
             ModifiedBy = modifiedBy;
             ModifiedOn = DateTime.Now;
         }
@@ -76,6 +84,10 @@ namespace CartifyDAL.Entities.order
             IsDeleted = true;
             DeletedBy = deletedBy;
             DeletedOn = DateTime.Now;
+        }
+        public void SetTotalAmount(double subTotal, double shippingCost, double tax)
+        {
+            TotalAmount = subTotal + shippingCost + tax;
         }
     }
 }

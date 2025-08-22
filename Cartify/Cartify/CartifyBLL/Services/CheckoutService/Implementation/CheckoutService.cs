@@ -134,10 +134,13 @@ public class CheckoutService : ICheckoutService
                     model.SelectedAddressId = newAddress.Id;
             }
 
+            var subTotal = model.Cart.Items.Sum(item => item.Quantity * item.ProductPrice); 
+            var shippingCost = model.ShippingCost;
+            var tax = model.Tax;
             // 3. Create order (required non-null fields set)
             var order = new Order(
                 orderStatus: "Pending",
-                shippingMethod: "Standard Shipping",
+                shippingMethod: model.PaymentMethod == "COD" ? "Cash on Delivery" : "Online Payment",
                 trackingNumber: GenerateTrackingNumber(),
                 shippingCost: model.ShippingCost,
                 tax: model.Tax,
@@ -146,7 +149,7 @@ public class CheckoutService : ICheckoutService
             {
                 UserId = userId
             };
-
+            order.SetTotalAmount(subTotal, shippingCost, tax);
             // 4. Build the list of OrderItem instances (do NOT set OrderId here; OrderRepo will attach them)
             var orderItems = new List<OrderItem>();
             foreach (var cartItem in model.Cart.Items)

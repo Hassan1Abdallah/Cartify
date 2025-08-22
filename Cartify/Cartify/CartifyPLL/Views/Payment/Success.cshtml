@@ -1,0 +1,62 @@
+﻿@{
+    ViewData["Title"] = "Payment Successful";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Success Message Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center py-5">
+                    <!-- Success Icon -->
+                    
+
+                    <!-- Success Title -->
+                    <h1 class="text-success mb-3">Payment Successful!</h1>
+                    <h4 class="text-muted mb-4">Thank you for your purchase</h4>
+
+                    <!-- Order Information -->
+                    <div class="alert alert-success" role="alert">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-receipt me-2"></i>Order Confirmation
+                        </h5>
+                        <p class="mb-1">
+                            <strong>Order Number:</strong> #@ViewBag.OrderId
+                        </p>
+                        <p class="mb-0">
+                            Your order has been successfully processed and payment confirmed.
+                        </p>
+                    </div>
+
+                    
+                    <!-- Action Buttons -->
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "Orders")" class="btn btn-primary btn-lg me-3">
+                            View My Orders
+                        </a>
+                        <a href="@Url.Action("Index", "Store")" class="btn btn-outline-secondary btn-lg">
+                            Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-redirect to orders page after 10 seconds (optional)
+        // setTimeout(function() {
+        //     window.location.href = '@Url.Action("Index", "Orders")';
+        // }, 10000);
+
+        // Prevent back button to avoid duplicate payments
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    </script>
+}

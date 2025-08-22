@@ -8,6 +8,7 @@ using CartifyBLL.Services.CheckoutService.Abstraction;
 using CartifyBLL.Services.CheckoutService.Implementation;
 using CartifyBLL.Services.OrderService.Abstraction;
 using CartifyBLL.Services.OrderService.Implementation;
+using CartifyBLL.Services.PaymentService.Abstraction;
 using CartifyBLL.Services.Product.Abstraction;
 using CartifyBLL.Services.Product.Impelementation;
 using CartifyBLL.Services.ProductReviewServices.Abstraction;
@@ -24,6 +25,8 @@ using CartifyDAL.Repo.cartRepo.Implementation;
 using CartifyDAL.Repo.categoryRepo.Abstraction;
 using CartifyDAL.Repo.CategoryRepo.Implementation;
 using CartifyDAL.Repo.Implementation;
+using CartifyDAL.Repo.paymentRepo.Abstraction;
+using CartifyDAL.Repo.paymentRepo.Impelemetation;
 using CartifyDAL.Repo.productRepo.Abstraction;
 using CartifyDAL.Repo.ProductRepo.Implementation;
 using CartifyDAL.Repo.ProductReviewRepo.Abstraction;
@@ -123,6 +126,9 @@ namespace CartifyPLL
             builder.Services.AddScoped<IWishlistService, WishlistService>();
             builder.Services.AddScoped<ISearchService, SearchService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
+
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IPaymentRepo, PaymentRepo>();
 
             // productReview Repo
             builder.Services.AddScoped<IProductReviewRepo, ProductReviewRepo>();

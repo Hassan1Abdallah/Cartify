@@ -10,8 +10,8 @@ namespace CartifyBLL.Services
 
         private readonly string smtpServer = "smtp.gmail.com";
         private readonly int smtpPort = 587;
-        private readonly string smtpUser = "zzezzo424@gmail.com"; 
-        private readonly string smtpPass = "dvpz gqdk felm kvrp";// Use App Password, not your Gmail password
+        private readonly string smtpUser = "hasan.dev.info@gmail.com"; 
+        private readonly string smtpPass = "faup brrh eemb trwu";// Use App Password, not your Gmail password
 
         public async Task SendVerificationCodeAsync(string toEmail, string code)
         {

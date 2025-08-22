@@ -27,7 +27,6 @@ namespace Cartify.DAL.DataBase
         public DbSet<ProductReview> ProductReview { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAddress> UserAddress { get; set; }
-        public DbSet<UserPayment> UserPayment { get; set; }
         public DbSet<Payment> Payment { get; set; }
         public DbSet<PaymentMethod> PaymentMethod { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }

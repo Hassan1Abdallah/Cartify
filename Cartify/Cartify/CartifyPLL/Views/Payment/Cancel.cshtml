@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "Payment Cancelled";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Cancel Message Card -->
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center py-5">
+                    <!-- Cancel Icon -->
+                    <div class="mb-4">
+                        <i class="fas fa-times-circle text-warning" style="font-size: 4rem;"></i>
+                    </div>
+
+                    <!-- Cancel Title -->
+                    <h1 class="text-warning mb-3">Payment Cancelled</h1>
+                    <h4 class="text-muted mb-4">Your order has not been processed</h4>
+
+                    <!-- Information -->
+                    <div class="alert alert-warning" role="alert">
+                        <h5 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>What happened?
+                        </h5>
+                        <p class="mb-1">
+                            You cancelled the payment process or closed the payment window.
+                        </p>
+                        <p class="mb-0">
+                            No charges have been made to your account.
+                        </p>
+                    </div>
+
+                    <!-- What's Next Section -->
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <i class="fas fa-shopping-cart text-primary mb-2" style="font-size: 2rem;"></i>
+                                <h6>Your Cart</h6>
+                                <small class="text-muted">Your items are still saved in your cart</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <i class="fas fa-redo text-success mb-2" style="font-size: 2rem;"></i>
+                                <h6>Try Again</h6>
+                                <small class="text-muted">You can complete your purchase anytime</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="text-center">
+                                <i class="fas fa-headset text-info mb-2" style="font-size: 2rem;"></i>
+                                <h6>Need Help?</h6>
+                                <small class="text-muted">Contact our support team</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="mt-4">
+                        <a href="@Url.Action("Index", "Cart")" class="btn btn-primary btn-lg me-3">
+                            <i class="fas fa-shopping-cart me-2"></i>Return to Cart
+                        </a>
+                        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-home me-2"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Information Card -->
+            <div class="card mt-4 border-0">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-question-circle text-info me-2"></i>Need Assistance?
+                    </h6>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-phone text-success me-2"></i>
+                                    Call us: <strong>+20 123 456 7890</strong>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-envelope text-primary me-2"></i>
+                                    Email: <strong>support@cartify.com</strong>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-clock text-warning me-2"></i>
+                                    Support Hours: <strong>9 AM - 6 PM</strong>
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-comments text-info me-2"></i>
+                                    Live Chat: <strong>Available 24/7</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Common Issues Card -->
+            <div class="card mt-4 border-0">
+                <div class="card-body">
+                    <h6 class="card-title">
+                        <i class="fas fa-lightbulb text-warning me-2"></i>Common Issues & Solutions
+                    </h6>
+                    <div class="accordion" id="helpAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    Payment window closed unexpectedly
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                                 data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    This can happen due to browser pop-up blockers or network issues.
+                                    Try disabling pop-up blockers and ensure you have a stable internet connection.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Card was declined
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                 data-bs-parent="#helpAccordion">
+                                <div class="accordion-body">
+                                    Please check your card details, ensure sufficient funds, and verify with your bank
+                                    that international/online transactions are enabled.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Optional: Auto-redirect to cart after 30 seconds
+        // setTimeout(function() {
+        //     window.location.href = '@Url.Action("Index", "Cart")';
+        // }, 30000);
+    </script>
+}

@@ -1,6 +1,8 @@
 ﻿using CartifyBLL.Helper;
+
 using CartifyBLL.Services.CartService.Abstraction;
 using CartifyBLL.Services.CheckoutService.Abstraction;
+using CartifyBLL.Services.PaymentService.Abstraction;
 using CartifyBLL.Services.UserServices;
 using CartifyBLL.ViewModels.Account;
 using CartifyBLL.ViewModels.Checkout;
@@ -18,20 +20,24 @@ public class CheckoutController : Controller
     private readonly IOrderRepo _orderRepo;
     private readonly IOrderItemRepo _orderItemRepo;
     private readonly IProductRepo _productRepo;
+    private readonly IPaymentService _paymentService; 
 
     public CheckoutController(
         ICartService cartService,
         ICheckoutService checkoutService,
         IUserService userService,
         IOrderRepo orderRepo,
-        IOrderItemRepo orderItemRepo, IProductRepo productRepo)
+        IOrderItemRepo orderItemRepo,
+        IProductRepo productRepo,
+        IPaymentService paymentService) 
     {
         _cartService = cartService;
         _checkoutService = checkoutService;
         _userService = userService;
         _orderRepo = orderRepo;
         _orderItemRepo = orderItemRepo;
-        _productRepo= productRepo;
+        _productRepo = productRepo;
+        _paymentService = paymentService; 
     }
 
     public async Task<IActionResult> Index()
@@ -42,7 +48,7 @@ public class CheckoutController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        // Get user cart
+        
         var (cartVM, cartError) = _cartService.GetUserCart(userId);
         if (!string.IsNullOrEmpty(cartError) || cartVM.IsEmpty)
         {
@@ -57,10 +63,10 @@ public class CheckoutController : Controller
         {
             Cart = cartVM,
             UserAddresses = userProfile?.Addresses ?? new List<AddressVM>(),
-            PaymentMethod = "CreditCard"
+            PaymentMethod = "Stripe" 
         };
 
-        // Set default address if exists
+        
         var defaultAddress = checkoutVM.UserAddresses.FirstOrDefault(a => a.IsDefault);
         if (defaultAddress != null)
         {
@@ -69,7 +75,6 @@ public class CheckoutController : Controller
 
         return View(checkoutVM);
     }
-
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -84,7 +89,6 @@ public class CheckoutController : Controller
             return RedirectToAction("Login", "Account");
         }
 
-        // Get current cart
         var (cartVM, cartError) = _cartService.GetUserCart(userId);
         if (!string.IsNullOrEmpty(cartError) || cartVM.IsEmpty)
         {
@@ -97,7 +101,6 @@ public class CheckoutController : Controller
 
         model.Cart = cartVM;
 
-        // ✅ Added validation: Ensure an address is selected
         if (!model.SelectedAddressId.HasValue)
         {
             var errorMsg = "Please select a shipping address.";
@@ -137,20 +140,31 @@ public class CheckoutController : Controller
                 return View("Index", model);
             }
 
-            // ✅ Reduce product quantity in database
-            foreach (var item in confirmation.OrderItems)
+            if (model.PaymentMethod == "COD") 
             {
-                await _productRepo.ReduceStockAsync(item.ProductId, item.Quantity);
+                
+
+                if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                    return Json(new { success = true, orderId = confirmation.OrderId });
+
+                TempData["Success"] = "Your order has been placed successfully! You will pay upon delivery.";
+                return RedirectToAction("Confirmation", new { id = confirmation.OrderId });
             }
+            else if (model.PaymentMethod == "Stripe") 
+            {
+                
 
-            // ✅ AJAX request → return orderId for JS redirect
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-                return Json(new { success = true, orderId = confirmation.OrderId });
-
-            TempData["Success"] = "Your order has been placed successfully!";
-            return RedirectToAction("Index", "Orders");
-
-
+                return RedirectToAction("CreateCheckoutSession", "Payment", new { orderId = confirmation.OrderId });
+            }
+            else
+            {
+                
+                TempData["Error"] = "Unsupported payment method.";
+                var userProfile = await _userService.GetUserProfileAsync(userId);
+                model.UserAddresses = userProfile?.Addresses ?? new List<AddressVM>();
+                return View("Index", model);
+            }
+            
         }
         catch (Exception ex)
         {
@@ -166,7 +180,6 @@ public class CheckoutController : Controller
             return View("Index", model);
         }
     }
-
 
     public IActionResult Confirmation(int id)
     {
@@ -189,10 +202,11 @@ public class CheckoutController : Controller
 
         return View("Confirmation", confirmation);
     }
+
     [HttpGet]
     public IActionResult GetShippingCost(string country, string postalCode)
     {
-        // Simple shipping cost calculation - you can make this more sophisticated
+        
         double cost = 0;
 
         switch (country?.ToUpper())
@@ -221,3 +235,4 @@ public class CheckoutController : Controller
         return Json(new { valid = isValid, message = error });
     }
 }
+

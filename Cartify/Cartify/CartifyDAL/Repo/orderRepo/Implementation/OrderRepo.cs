@@ -143,5 +143,24 @@ namespace CartifyDAL.Repo.Implementation
                 return (false, inner.Message);
             }
         }
+        public async Task<(Order, string?)> GetByIdWithItemsAsync(int orderId)
+        {
+            try
+            {
+                var order = await _db.Order
+                                          .Include(o => o.OrderItems) 
+                                          .FirstOrDefaultAsync(o => o.OrderId == orderId);
+
+                if (order == null)
+                {
+                    return (null, "Order not found.");
+                }
+                return (order, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, $"Database error: {ex.Message}");
+            }
+        }
     }
 }

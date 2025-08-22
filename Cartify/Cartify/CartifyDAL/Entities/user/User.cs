@@ -28,10 +28,11 @@ namespace CartifyDAL.Entities.user
         public UserGender Gender { get;  set; }
         public DateTime BirthDate { get;  set; }
 
+        [MaxLength(255)] 
+        public string? StripeCustomerId { get; set; }
         public string? AvatarUrl { get; set; }
 
         // Navigation Properties
-        public List<UserPayment>? UserPayments { get; private set; }
         public virtual ICollection<UserAddress> Addresses { get; set; }
         public List<Order>? Orders { get;  set; }
 
